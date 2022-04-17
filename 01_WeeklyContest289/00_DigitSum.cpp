@@ -21,7 +21,43 @@ using namespace std;
 
 class Solution
 {
-    // Wrong solution 
+
+public:
+    string digitSum(string s, int k)
+    {
+        if (s.length() <= k)
+        {
+            return s;
+        }
+        do
+        {
+            int sum = 0;
+            int count = 0;
+            string res = "";
+            for (int i = 0; i < s.length(); i++)
+            {
+                if (count == k)
+                {
+                    res.append(to_string(sum));
+                    sum = 0;
+                    count = 0;
+                }
+                sum += (s[i] - 48);
+                count++;
+            }
+            if (count)
+            {
+                res.append(to_string(sum));
+            }
+            s = res;
+        } while (s.length() > k);
+        return s;
+    }
+};
+
+class Solution
+{
+    // Wrong solution
 public:
     string digitSum(string s, int k)
     {
