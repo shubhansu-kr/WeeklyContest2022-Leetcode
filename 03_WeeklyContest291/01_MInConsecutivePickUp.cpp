@@ -13,8 +13,32 @@ using namespace std;
 
 class Solution
 {
-    // Pick up card in same sequence 
-    // TLE 
+    // Pick up card in same sequence
+    // TLE
+public:
+    int minimumCardPickup(vector<int> &cards)
+    {
+        for (int i = 1; i < cards.size(); i++)
+        {
+            int start = 0, end = start + i;
+            while (end < cards.size())
+            {
+                if (cards[start] == cards[end])
+                {
+                    return i+1;
+                }
+                ++start;
+                ++end;
+            }
+        }
+        return -1 ;
+    }
+};
+
+class Solution
+{
+    // Pick up card in same sequence
+    // TLE
 public:
     int minimumCardPickup(vector<int> &cards)
     {
