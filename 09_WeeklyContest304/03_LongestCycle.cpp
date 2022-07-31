@@ -12,12 +12,77 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution
-{
-    // Unsolved
-public:
-    int longestCycle(vector<int> &edges)
+class Solution {
+    void dfs1(int node,vector<vector<int>>&g,vector<int>&vis,stack<int>&topo)
     {
+        vis[node]=1;
+        for(auto child : g[node])
+        {
+            if(vis[child]==0)
+            {
+                vis[node]=1;
+                dfs1(child,g,vis,topo);
+            }
+        }
+        topo.push(node);
+    }
+    void Revdfs(int node,vector<vector<int>>&g,vector<int>&vis,vector<int>&component)
+    {
+        vis[node]=1;
+        component.push_back(node);
+        for(auto child : g[node])
+        {
+            if(vis[child]==0)
+            {
+                vis[child]=1;
+                Revdfs(child,g,vis,component);
+            }
+        }
+    }
+    
+public:
+    int longestCycle(vector<int>& edges) {
+        int n=edges.size();
+        
+        vector<vector<int>> g(n);
+        vector<vector<int>> rev(n);
+        for(int i=0;i<n;i++)
+        {
+            int child=edges[i];
+            if(child!=-1)
+            {
+                g[i].push_back(child);
+                rev[child].push_back(i);
+            }
+        }
+        
+        vector<int> vis1(n,0);
+        stack<int> topo;
+        for(int i=0;i<n;i++)
+        {
+            if(!vis1[i])
+                dfs1(i,g,vis1,topo);
+        }
+        
+        vector<int> vis2(n,0);
+        int ans=-1;
+        while(!topo.empty())
+        {
+            int node=topo.top();
+            topo.pop();
+ 
+            if(vis2[node]==0)
+            {
+                vector<int> component;
+                component.clear();
+                Revdfs(node,rev,vis2,component);
+                int k=component.size();
+                if(k!=1)
+                    ans=std::max(ans,k);
+            }
+        }
+        
+        return ans;
     }
 };
 
