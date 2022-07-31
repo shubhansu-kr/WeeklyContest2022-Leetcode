@@ -16,13 +16,60 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class Solution
-{
-    // Unsolved
+class Solution {
 public:
-    int closestMeetingNode(vector<int> &edges, int node1, int node2)
-    {
-        //
+    int closestMeetingNode(vector<int>& edges, int node1, int node2) {
+        int n=edges.size();
+        
+        vector<vector<int>> g(n);
+        for(int i=0;i<n;i++)
+        {
+            int child=edges[i];
+            if(child!=-1)
+                g[i].push_back(child);
+        }
+        
+        auto bfs_trav=[&](int sr)
+        {
+            vector<int> dist(n,1e9);
+            queue<int> bfs;
+            
+            bfs.push(sr);
+            dist[sr]=0;
+            
+            while(!bfs.empty())
+            {
+                int node=bfs.front();
+                bfs.pop();
+                
+                for(auto child : g[node])
+                {
+                    if(dist[child]>dist[node]+1)
+                    {
+                        dist[child]=dist[node]+1;
+                        bfs.push(child);
+                    }
+                }
+            }
+            
+            return dist;
+        };
+        
+        auto dist1=bfs_trav(node1);
+        auto dist2=bfs_trav(node2);
+        
+        int val=1e8;
+        int ans=-1;
+        for(int i=0;i<n;i++)
+        {
+            if(val>std::max(dist1[i],dist2[i]))
+            {
+                ans=i;
+                val=std::max(dist1[i],dist2[i]);
+            }
+        }
+        
+        return ans;
     }
 };
 
